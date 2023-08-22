@@ -40,7 +40,7 @@ const questions = [
         answers: [
             {text: "four", correct: false},
             {text: "five", correct: false},
-            {text: "six", correct: false},
+            {text: "six", correct: true},
             {text: "ten", correct: false}
         ]
     },
@@ -96,10 +96,46 @@ function selectAnswer(e){
     const isCorrect = selectedBtn.dataset.correct === "true";
     if(isCorrect){
         selectedBtn.classList.add("correct");
+        score++;
     } else {
         selectedBtn.classList.add("incorrect");
     }
+    Array.from(answerBtns.children).forEach(button =>{
+        if(button.dataset.correct === "true"){
+            button.classList.add("correct")
+        } else{
+            button.disabled = true;
+        }
+    })
+    nextBtn.style.display = "block";
 }
+
+//Creating the next button
+function handleNextBtn(){
+    currentQuestionIndex++;
+    if(currentQuestionIndex < questions.length){
+        showQuestion();
+    } else{
+        showScore();
+    }
+}
+
+//Showing the score obtained
+function showScore(){
+    resetState();
+    questionEl.innerHTML = `You scored ${score} out of ${questions.length}!`
+    nextBtn.innerHTML = "Play Again!";
+    nextBtn.style.display = "block"
+}
+
+//Add an eventlistener to the next-button
+nextBtn.addEventListener("click", function(){
+    if(currentQuestionIndex < questions.length){
+        handleNextBtn();
+    } else{
+        startQuiz();
+    }
+})
 
 
 
